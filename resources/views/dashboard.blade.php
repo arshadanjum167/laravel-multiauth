@@ -1,23 +1,39 @@
-@extends('layouts.app')
+{{-- @extends('layouts.app') --}}
+@extends('layouts.admin.main')
+@section('title', config('params.appTitle') )
 
-@section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Admin Dashboard</div>
-
-                <div class="panel-body">
-                    @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    You are logged in!
-                </div>
-            </div>
+@section('main_contant')
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header hide">
+        <h1 class="heading clearfix">
+            Dashboard
+        </h1>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="box-header">
+            <h1 class="box-title">
+                Dashboard
+            </h1>
         </div>
-    </div>
+        <div class="row">
+            <div class="col-md-4 col-sm-6 col-xs-12">
+              <a href="{{ URL::to('admin/user') }}" class="info-box bg-aqua">
+                <span class="info-box-icon"><i class="fa fa-users"></i></span>
+
+                <div class="info-box-content">
+                  <span class="info-box-text">Users</span>
+                  <span class="info-box-number">{{ $user_count}}</span>
+                </div>
+                <!-- /.info-box-content -->
+              </a>
+              <!-- /.info-box -->
+            </div>
+            
+        </div>
+    </section>
+    <!-- /.content -->
 </div>
 @endsection
+

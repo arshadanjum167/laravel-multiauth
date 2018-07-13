@@ -43,14 +43,30 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/admin', 'Auth\AdminLoginController@showLoginForm')->name('admin.login');
 
 
 Route::prefix('admin')->group(function () {
 Route::get('/login', 'Auth\AdminLoginController@showLoginForm')->name('admin.login');
 Route::post('/login', 'Auth\AdminLoginController@login')->name('adminlogin');
 Route::get('/dashboard', 'DashboardController@index')->name('admin.dashboard');
-Route::post('/logout', 'Auth\AdminLoginController@logout')->name('admin.logout');
+Route::get('/logout', 'Auth\AdminLoginController@logout')->name('admin.logout');
 
+//Admin forgot password
+Route::get('/password/reset','Admin\ForgorPasswordController@showLinkRequestForm')->name('forgot_password');
+Route::post('/password/email','Admin\ForgorPasswordController@sendResetLinkEmail');
+
+//Admin reset password
+Route::get('/password/reset/{token}','Admin\ResetPasswordController@showResetForm');
+Route::post('/password/reset','Admin\ResetPasswordController@reset');
+
+//user
+//Route::get('/user', 'Admin\UserController@index')->name('admin.user');
+Route::resource('user', 'Admin\UserController',[
+  'parameters'=>[
+    'user'=>'id',
+  ]
+]);
 
 });
 
