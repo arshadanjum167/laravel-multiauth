@@ -60,6 +60,14 @@ Route::post('/password/email','Admin\ForgorPasswordController@sendResetLinkEmail
 Route::get('/password/reset/{token}','Admin\ResetPasswordController@showResetForm');
 Route::post('/password/reset','Admin\ResetPasswordController@reset');
 
+//Admin change password
+Route::get('/changepassword', 'Admin\DefaultController@showChangepasswordForm')->name('admin.showchangepassword');
+Route::post('/changepassword', 'Admin\DefaultController@changepassword')->name('admin.changepassword');
+
+//Admin Edit Profile
+Route::get('/editprofile', 'Admin\DefaultController@showEditprofileForm')->name('admin.showeditprofile');
+Route::post('/editprofile', 'Admin\DefaultController@editprofile')->name('admin.editprofile');
+
 //user
 //Route::get('/user', 'Admin\UserController@index')->name('admin.user');
 Route::resource('user', 'Admin\UserController',[

@@ -10,41 +10,49 @@
 @section('title', config('params.appTitle') )
 @section('main_contant')
 
-<div class="content-wrapper">
+
+<section class="content-header">
+    <h1>Users</h1>
+    <ol class="breadcrumb">
+      <li><a href="{{ URL::to('admin/dashboard') }}" >Home</a></li>
+      <li class="active"><a href="{{ URL::to('admin/user') }}" >Users</a></li>
+    </ol>
+  </section>
+
 
     <!-- Main content -->
     <section class="content">
-        <div class="box-header">
-            <div class="pull-right">
-                <div class="pull-left">
-                  {!! Form::open(['url' => 'admin/user','class'=>'form-horizontal','method'=>'GET']) !!}
-                    <div class="new-search input-group">
-                        <input type="text" name="search" class="form-control input-sm" value="{{ $search }}" placeholder="Search...">
-                        <!--<a href="#"><span name="search" id="search-btn" class="btn-flat"><i class="fa fa-search"></i></span></a>-->
-                        <span class="input-group-btn">
-                            <button class="btn btn-default btn-sm" type="submit" ><i class="fa fa-search"></i></button>
-                        </span>
-                    </div>
-                    {!! Form::close() !!}
-                </div>&nbsp;
-                <!-- <a href="#" class="btn btn-default2 btn-sm"><i class="fa fa-print"></i> Print</a> -->
-                <a href="{{ URL::to('admin/user/create') }}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add New</a>
-            </div>
-            <h1 class="box-title">
+        <div class="box box-primary">
+        
+            <div class="box-header with-border">
+                @if (Session::has('message'))
+              {!! Session::get('message') !!}
+            @endif
+            <a href="{{ URL::to('admin/user/create') }}" class="btn btn-primary pull-right"> Add New User</a>
+            <h3 class="box-title">
                 Users List
-            </h1>
+            </h3>
         </div>
-        @if (Session::has('message'))
-          {!! Session::get('message') !!}
-        @endif
-        <div class="box">
-            <table class="table table-hover" id="example1">
+        <div class="box-body">
+        {!! Form::open(['url' => 'admin/user','class'=>'form-horizontal','method'=>'GET']) !!}
+        <div class="input-group filter-bottom-margin" style="width: 250px;">
+                                        <input type="text" class="form-control pull-right" value="{{ $search }}" placeholder="Search" autofocus="" name="search">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-default" type="submit" value="Search"><i class="fa fa-search"></i></button>
+                                        </div>
+                                    </div>
+            
+        {!! Form::close() !!}
+        <div class="clearfix"></div>
+        <div class="table-responsive ">
+            <table class="table table-hover table table-bordered table-striped" id="example1">
                 <thead>
                     <tr>
                         <th width="50px" class="text-center">#</th>
                         <th>Name</th>
                         <th >Email Address</th>
-                        <th width="50px">&nbsp;</th>
+                        <th >Action</th>
+                        <!--<th width="50px">&nbsp;</th>-->
                     </tr>
                 </thead>
                 <tbody>
@@ -56,21 +64,24 @@
                           <td>{{$v->email}}</td>
                           {{--<td class="text-center">{{$v->masjids->count()}}</td>--}}
                           <td>
-                              <div class="dropdown text-right">
-                                  <a href="javascript:;" class="btn btn-default btn-default-white btn-sm btn-icon-only dropdown-toggle" data-toggle="dropdown">
-                                  <i class="material-icons more_vert">more_vert</i>
-                                  </a>
-                                  <ul class="dropdown-menu pull-right">
-                                      <li><a href="{{ URL::to('admin/user/'.$v->id.'/edit') }}">Edit</a></li>
-                                      <li>
-                                         {{ Form::open(array('url' => 'admin/user/' . $v->id)) }}
+                          <div class="buttons-set">
+                          {{ Form::open(array('url' => 'admin/user/' . $v->id)) }}
+                                <a href="{{ URL::to('admin/user/'.$v->id.'/edit') }}" class="btn btn-default btn-sm btn-icon-only">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                
+                                <!--<a href="javascript:void(0);" class="btn btn-default btn-sm btn-icon-only">-->
+                                <!--    <i class="fa fa-trash"></i>-->
+                                <!--</a>-->
+                            
+                                         
                                          {{ Form::hidden('_method', 'DELETE') }}
-                                         <button type="submit" class="btn btn-block btn-submit" >Remove</button>
+                                         <button type="submit" class="btn btn-default btn-sm btn-icon-only btn-submit" > <i class="fa fa-trash"></i></button>
                                          {{ Form::close() }}
-                                      </li>
-                                  </ul>
-                              </div>
-                          </td>
+                                    
+                            </div>
+                            </td>
+                          
                       </tr>
                     @endforeach
                   @else
@@ -82,12 +93,18 @@
                   @endif
                 </tbody>
             </table>
-        </div>
-        {{ $users->links() }}
+                </div>
+                    
+        {{--<div class="box-footer pagination-table pull-right">--}}
+        <div class="box-footer text-right">
+            {{ $users->links() }}
+            </div>
+        
+         </div>   
 
     </section>
     <!-- /.content -->
-</div>
+
 @endsection
 
 
@@ -100,5 +117,23 @@ $(".btn-submit").click(function(){
     return false;
   }
 });
+//for delete signle user
+function del(id,field)
+{
+ var a=confirm("Are you sure want to delete this data?");
+    if (a) {
+            var id1 = id;
+            var field1 =field;
+            $.ajax({type: "GET",
+            url: "{{ URL::to('admin/user/') }}",
+            data: { id: id1,field :field1},
+            success:function(result){
+            $.pjax.reload({container: '#w1-pjax', timeout: 2000});
+            setTimeout(function(){
+                    reloadcheckbox();
+            },2001);
+        }});
+	}
+}
 </script>
 @endsection

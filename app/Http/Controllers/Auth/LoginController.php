@@ -5,6 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\Models\User;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
+use Session;
 
 class LoginController extends Controller
 {
@@ -39,7 +45,7 @@ class LoginController extends Controller
     }
 
 
-    public function login(Request $request)
+    public function loginold(Request $request)
     {
 
         // dd($request);
@@ -66,6 +72,50 @@ class LoginController extends Controller
         $this->incrementLoginAttempts($request);
 
         return $this->sendFailedLoginResponse($request);
+    }
+    
+    public function login(Request $request)
+    {
+      $rules= [
+            'email' => 'required|email',
+            'password' => 'required',
+        ];
+      $validator = Validator::make($request->all(), $rules);
+      if ($validator->fails()) {
+             return redirect('/login')
+                         ->withErrors($validator)
+                         ->withInput();
+      }
+
+      $user=User::where('email',$request->input('email'))->where('isAdmin','0')->where('is_deleted','N')->first();
+        
+      if($user) // user exist
+      {
+        if($user->is_active=='N') // check user is blocked or not
+        {
+          $message=config('params.msg_error').'You have been blocked by admin  !'.config('params.msg_end');
+          Session::flash('message',$message);
+          return redirect('/login');
+        }
+        if($user->password!=md5($request->input('password')))
+        {
+          $message=config('params.msg_error').'Email id or password does not match  !'.config('params.msg_end');
+          Session::flash('message',$message);
+          return redirect('/login');
+        }
+            //dd(Auth::guard('web')->login($user));
+        //Auth::guard()->login();
+        Auth::guard()->login($user);
+
+        return redirect('/home');
+
+      }
+      else { // user not found
+        $message=config('params.msg_error').'Email Id not found !'.config('params.msg_end');
+        Session::flash('message',$message);
+
+        return redirect('/login');
+      }
     }
 
     protected function validateLogin(Request $request)

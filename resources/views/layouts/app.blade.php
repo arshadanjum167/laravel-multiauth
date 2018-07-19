@@ -52,20 +52,20 @@
                                 </a>
 
                                 <ul class="dropdown-menu">
-                                    @if(Auth::user()->isAdmin==0)
+                                   {{-- @if(Auth::user()->isAdmin==0)--}}
                                     <li>
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                            Logout
+                                            Logout11
                                         </a>
 
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                             {{ csrf_field() }}
                                         </form>
                                     </li>
-                                    @else
-                                    <li>
+                                    {{--@else--}}
+                                    <!--<li>
                                         <a href="{{ route('admin.logout') }}"
                                             onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -75,8 +75,8 @@
                                         <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
                                             {{ csrf_field() }}
                                         </form>
-                                    </li>
-                                    @endif
+                                    </li>-->
+                                    {{--@endif--}}
                                 </ul>
                             </li>
                         @endguest

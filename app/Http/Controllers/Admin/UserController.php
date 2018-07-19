@@ -137,7 +137,7 @@ class UserController extends Controller
         //
         $rules= [
             'name' => 'required|max:255|min:3',
-            'email' => 'required|email|max:255|min:3',
+            'email' => 'required|email|max:255|min:3|unique:users',
       ];
       $validator = Validator::make($request->all(), $rules);
       if ($validator->fails()) {

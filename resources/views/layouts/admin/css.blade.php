@@ -8,6 +8,9 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 
+
+<link href="{{ asset('/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
 <link href="{{ asset('/css/AdminLTE.min.css') }}" rel="stylesheet">
-<link href="{{ asset('/css/_all-skins.min.css') }}" rel="stylesheet">
-<link href="{{ asset('/css/custom.css') }}" rel="stylesheet">
+<link href="{{ asset('/plugins/iCheck/square/blue.css') }}" rel="stylesheet">
+{{--<link href="{{ asset('/css/_all-skins.min.css') }}" rel="stylesheet">
+<link href="{{ asset('/css/custom.css') }}" rel="stylesheet">--}}

@@ -20,8 +20,9 @@ class ForgorPasswordController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('admin_guest');
-        //$this->middleware('auth:admin');
+        //$this->middleware('admin_guest');
+        //$this->middleware('admin_guest')->only();
+        $this->middleware('guest')->only('forgot_password');
     }
     public function showLinkRequestForm()
     {

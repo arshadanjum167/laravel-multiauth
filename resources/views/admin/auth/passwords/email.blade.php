@@ -1,62 +1,41 @@
 {{--@extends('admin.layouts.login')--}}
-@extends('layouts.app')
+{{--@extends('layouts.app')--}}
+@extends('layouts.admin.before_login')
 {{--@section('main_contant')--}}
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-sm-12 col-md-6 col-md-offset-3">
-            <div class="panel panel-default"  style="margin-top:15%">
-                <div class="panel-heading">
+<!-- /.login-logo -->
+  <div class="login-box-body">
+    <p class="login-box-msg">Please enter your registered email address</p>
+                
+        @if (Session::has('message'))
+          {!! Session::get('message') !!}
+        @endif
+        
 
-                  <h3 style="margin: 5px 0px;">Forgot Password</h3>
-                </div>
-                <div class="panel-body">
-                  @if (Session::has('message'))
-                    {!! Session::get('message') !!}
-                  @endif
-                  
+        {!! Form::open(['url' => 'admin/password/email','method'=>'POST','class'=>'login-form']) !!}
+          {{ csrf_field() }}
 
-                  {!! Form::open(['url' => 'admin/password/email','method'=>'POST','class'=>'form-horizontal']) !!}
-                    {{ csrf_field() }}
+              <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }} has-feedback input-icon" >
+                  <!--<label for="email" class="col-md-4 control-label">E-Mail Address</label>-->
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail Address</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
-
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-                    <div class="form-group">
-                      <div class="col-sm-offset-3 col-sm-2">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                      </div>
-                    </div>
-                  {!! Form::close() !!}
-                </div>
-                <div class="panel-footer">
-                  <div class="row">
-                    <div class="col-sm-12">
-
-                  <p class="pull-left">
-                    <a href="{{ URL::to('admin/login') }}">Sign In</a>
-
-                  </p>
-                  {{--<p class="pull-right">
-                    Sign in with
-                     <a href="{{ route('facebook_login') }}">Facebook</a> or
-                     <a href="{{ route('google_login') }}">Google</a>
-                  </p>--}}
-                </div>
-                </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                  <!--<div class="col-md-6">-->
+                      <input id="email" type="email" class="form-control" name="email" placeholder="Email Address" value="{{ old('email') }}" required>
+                        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                      @if ($errors->has('email'))
+                          <span class="help-block">
+                              <strong>{{ $errors->first('email') }}</strong>
+                          </span>
+                      @endif
+                  <!--</div>-->
+              </div>
+          
+              <button type="submit" name="login-button" class="btn btn-primary btn-block btn-flat">Submit</button>
+            
+          
+        {!! Form::close() !!}
+      <div class="social-auth-links text-center">
+          <a href="{{ URL::to('admin/login') }}" class="text-center">I remember my password.</a>
+      </div>      
+  </div>
+        
 @endsection
