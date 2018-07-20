@@ -59,10 +59,7 @@
                                 
                     </form>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
+            
     <script>
  $(".checkbox").addClass("icheck");
  $(".form-group").addClass("has-feedback");
