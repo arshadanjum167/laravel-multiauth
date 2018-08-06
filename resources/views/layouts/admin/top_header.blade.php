@@ -1,6 +1,6 @@
 <?php
 $image=asset('img/avatar.png');
-if(Auth::user()->avatar!='')
+if(isset(Auth::user()->avatar) && Auth::user()->avatar!='')
 $image=Auth::user()->avatar;
 ?>
 <header class="main-header">

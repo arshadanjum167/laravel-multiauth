@@ -43,6 +43,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/profile', 'Web\DefaultController@showEditprofileForm')->name('showeditprofile');
+Route::post('/profile', 'Web\DefaultController@editprofile')->name('editprofile');
 Route::get('/admin', 'Auth\AdminLoginController@showLoginForm')->name('admin.login');
 
 

@@ -61,5 +61,6 @@ class Kernel extends HttpKernel
         'Role'=> \App\Http\Middleware\Role::class,
         'Test'=> \App\Http\Middleware\Test::class,
         // 'admin' => \App\Http\Middleware\Admin::class,
+        // 'token'=> \App\Http\Middleware\TokenAuth::class,
     ];
 }

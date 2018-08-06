@@ -8,6 +8,9 @@
                 <div class="panel-heading">Dashboard</div>
 
                 <div class="panel-body">
+                @if (Session::has('message'))
+                    {!! Session::get('message') !!}
+                  @endif
                     @if (session('status'))
                         <div class="alert alert-success">
                             {{ session('status') }}

@@ -2,12 +2,20 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
+
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Foundation\Auth\RegistersUsers;
+
+//use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
-use Illuminate\Auth\Events\Registered;
+//use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
+use Session;
+use App\Models\User;
+
+use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
@@ -22,14 +30,14 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers;
+    //use AuthenticatesUsers;
 
     /**
      * Where to redirect users after registration.
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/login';
 
     /**
      * Create a new controller instance.
@@ -47,14 +55,15 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
-    }
+    //protected function validator(array $data)
+    //{
+    //    
+    //    return Validator::make($data, [
+    //        'name' => 'required|string|max:255',
+    //        'email' => 'required|string|email|max:255|unique:users',
+    //        'password' => 'required|string|min:6|confirmed',
+    //    ]);
+    //}
 
     /**
      * Create a new user instance after a valid registration.
@@ -71,18 +80,57 @@ class RegisterController extends Controller
             'password' => md5($data['password']),
         ]);
     }
-
+    public function showRegistrationForm()
+    {
+        return view('auth.register');
+    }
     public function register(Request $request)
     {
-        // dd($request);
+         
+    
+        //$this->validator($request->all())->validate();
+        $rules= [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+        ];
+        
+        $validator = Validator::make($request->all(), $rules);
+        
+        if ($validator->fails()) {
+            
+               return redirect('/register')
+                           ->withErrors($validator)
+                           ->withInput();
+        }
+        else
+        {
+            //dd('aaaa');
+        }
+        //dd(Auth::guard());
 
-        $this->validator($request->all())->validate();
+        //event(new Registered($user = $this->create($request->all())));
+        $user=new User;
+        $user->name=$request->input('name');
+        $user->email=$request->input('email');
+        $user->password=md5($request->input('password'));
+        
+         //dd($user);
+        if($user->save())
+        {            
+          $message=config('params.msg_success').'User successfully created !'.config('params.msg_end');
+          $request->session()->flash('message',$message);
+          return redirect('/home');
+        }
+        else {
+          $message=config('params.msg_error').'Error in save !'.config('params.msg_end');
+          $request->session()->flash('message',$message);
+          return redirect('/register');
+        }
 
-        event(new Registered($user = $this->create($request->all())));
-
-        // $this->guard()->login($user);
-
-        return $this->registered($request, $user)
-                        ?: redirect($this->redirectPath());
+        
+        //return redirect('/home');
+        //return $this->registered($request, $user)
+        //                ?: redirect($this->redirectPath());
     }
 }
